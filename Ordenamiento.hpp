@@ -4,6 +4,8 @@ using namespace std;
 class Ordenamiento {
 
 private:
+  
+
 public:
   Ordenamiento();
   // metodos de ordenamiento
@@ -12,6 +14,7 @@ public:
   void seleccion(int coleccion[]);
   void shellSort(int coleccion[]);
   void quickSort(int coleccion[]);
+  void burbujaModificado(int coleccion[]);
 
   // metodos de ejecutar el arreglo
   void initDesordenado(int array[]);

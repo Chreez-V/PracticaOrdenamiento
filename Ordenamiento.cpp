@@ -87,4 +87,24 @@ void Ordenamiento::shellSort(int coleccion[]) {
   }
 }
 
+void Ordenamiento::burbujaModificado(int coleccion[]) {
+  int comparaciones,intercambios;
+  comparaciones = 0;
+    intercambios = 0;
+    bool swapped;
+    for (int i = 0; i < MAX - 1; i++) {
+        swapped = false;
+        for (int j = 0; j < MAX - i - 1; j++) {
+            comparaciones++;
+            if (coleccion[j] > coleccion[j + 1]) {
+                swap(coleccion[j], coleccion[j + 1]);
+                intercambios++;
+                swapped = true;
+            }
+        }
+        if (!swapped)
+            break;
+    }
+}
+
 void Ordenamiento::quickSort(int coleccion[]) {}
