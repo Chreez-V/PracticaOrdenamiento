@@ -1,24 +1,39 @@
 #include <iostream>
+#include <chrono>
+
 #define MAX 10
 using namespace std;
-class Ordenamiento {
+class Ordenamiento
+ {
 
 private:
 public:
   Ordenamiento();
-  // metodos de ordenamiento
-  void insercion(int coleccion[]);
-  void burbuja(int coleccion[]);
-  void seleccion(int coleccion[]);
-  void shellSort(int coleccion[]);
-  void quickSort(int coleccion[]);
-
-  // metodos de ejecutar el arreglo
+  /**
+   * @brief 
+   * Metodos de ordenamiento.
+   * @param coleccion 
+   * @return std::chrono::duration<float,milli> 
+   */
+  std::chrono::duration<float,milli> insercion(int coleccion[]);
+  std::chrono::duration<float,milli> burbuja(int coleccion[]);
+  std::chrono::duration<float,milli> seleccion(int coleccion[]);
+  std::chrono::duration<float,milli> shellSort(int coleccion[]);
+  std::chrono::duration<float,milli> quickSort(int coleccion[],int inicio,int fin);
+  std::chrono::duration<float,milli> burbujaModificado(int coleccion[]);
+  /**
+   * @brief 
+   * metodos para ordenar,desordenar e invertir los arreglos.
+   * @param array 
+   */
   void initDesordenado(int array[]);
   void initOrdenado(int array[]);
   void initOrdenadoInv(int array[]);
 
-  // metodos para imprimir datos
+  /**
+   * @brief 
+   * metodos para mostrar los mejores resultados.
+   */
   void tablaTiempos();
   void tablaIntercambios();
   void tablaComparaciones();
