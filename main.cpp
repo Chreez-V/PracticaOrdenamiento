@@ -1,58 +1,163 @@
 #include "Ordenamiento.hpp"
-#define MAX 10
+#include <algorithm>
+#include <chrono>
+#include <iostream>
+#include <vector>
+
+// Prototipos de las funciones del menú
+void mostrarMenu();
+void mostrarResultadosPorTiempo(Ordenamiento &ordenamiento, int array[]);
+void compararOrdenamientos(Ordenamiento &ordenamiento, int array[],
+                           bool primerosMil);
 
 int main() {
-  Ordenamiento obj;
+  Ordenamiento ordenamiento;
   int array[MAX];
+  bool salir = false;
 
-  obj.initOrdenado(array);
-  cout << "Array en orden ascendente: ";
-  for (int i = 0; i < MAX; i++) {
-    cout << array[i] << " ";
-  }
-  cout << endl;
-  obj.initDesordenado(array);
-  cout << "Array en orden aleatorio: ";
-  for (int i = 0; i < MAX; i++) {
-    cout << array[i] << " ";
-  }
+  while (!salir) {
+    mostrarMenu();
+    int opcion;
+    std::cin >> opcion;
 
-  cout << endl;
-  obj.burbuja(array);
-  cout << "array ordenado en burbuja: ";
-  for (int i = 0; i < MAX; i++) {
-
-    cout << array[i] << " ";
-  }
-  cout << endl;
-
-  cout << endl;
-  obj.initOrdenadoInv(array);
-  cout << "Array en orden descendente: ";
-  for (int i = 0; i < MAX; i++) {
-    cout << array[i] << " ";
+    switch (opcion) {
+    case 1:
+      ordenamiento.tablaTiempos();
+      break;
+    case 2:
+      compararOrdenamientos(ordenamiento, array, false);
+      break;
+    case 3:
+      compararOrdenamientos(ordenamiento, array, true);
+      break;
+    case 4:
+      salir = true;
+      break;
+    default:
+      std::cout << "Opción no válida. Por favor, intente de nuevo."
+                << std::endl;
+      break;
+    }
   }
 
-  cout << endl;
-  obj.insercion(array);
-  cout << "array ordenado en insercion: ";
-  for (int i = 0; i < MAX; i++) {
-
-    cout << array[i] << " ";
-  }
-  cout << endl;
-  obj.initDesordenado(array);
-  cout << "Array en orden aleatorio: ";
-  for (int i = 0; i < MAX; i++) {
-    cout << array[i] << " ";
-  }
-  cout << endl;
-  obj.insercion(array);
-  cout << "array ordenado en insercion: ";
-  for (int i = 0; i < MAX; i++) {
-
-    cout << array[i] << " ";
-  }
-
-  cout << endl;
+  return 0;
 }
+
+void mostrarMenu() {
+  std::cout << "\n--- Menú de Opciones ---" << std::endl;
+  std::cout << "1. Mostrar resultados por tiempo" << std::endl;
+  std::cout << "2. Comparar ordenamientos en arreglo completo" << std::endl;
+  std::cout << "3. Comparar ordenamientos en primeros 1000 elementos de un "
+               "arreglo de 30000"
+            << std::endl;
+  std::cout << "4. Salir" << std::endl;
+  std::cout << "Seleccione una opción: ";
+}
+
+void mostrarResultadosPorTiempo(Ordenamiento &ordenamiento, int array[]) {
+  std::vector<std::pair<std::string, std::chrono::duration<float, std::milli>>>
+      resultados;
+
+  ordenamiento.initDesordenado(array);
+  resultados.emplace_back("Insercion", ordenamiento.insercion(array));
+
+  ordenamiento.initDesordenado(array);
+  resultados.emplace_back("Burbuja", ordenamiento.burbuja(array));
+
+  ordenamiento.initDesordenado(array);
+  resultados.emplace_back("Seleccion", ordenamiento.seleccion(array));
+
+  ordenamiento.initDesordenado(array);
+  resultados.emplace_back("Shell Sort", ordenamiento.shellSort(array));
+
+  ordenamiento.initDesordenado(array);
+  resultados.emplace_back("Burbuja Modificado",
+                          ordenamiento.burbujaModificado(array));
+
+  ordenamiento.initDesordenado(array);
+  resultados.emplace_back("Quick Sort",
+                          ordenamiento.quickSort(array, 0, MAX - 1));
+
+  std::sort(resultados.begin(), resultados.end(),
+            [](auto &left, auto &right) { return left.second < right.second; });
+
+  std::cout << "\n--- Resultados por Tiempo (Arreglo Desordenado) ---"
+            << std::endl;
+  for (const auto &resultado : resultados) {
+    std::cout << resultado.first << ": " << resultado.second.count() << " ms"
+              << std::endl;
+  }
+}
+
+void compararOrdenamientos(Ordenamiento &ordenamiento, int array[],
+                           bool primerosMil) {
+  std::vector<std::pair<std::string, std::chrono::duration<float, std::milli>>>
+      resultados;
+
+  if (primerosMil) {
+    const int numElementos = 1000;
+    int tempArray[numElementos];
+
+    ordenamiento.initDesordenado(array);
+    std::copy(array, array + numElementos, tempArray);
+    resultados.emplace_back("Insercion", ordenamiento.insercion(tempArray));
+
+    ordenamiento.initDesordenado(array);
+    std::copy(array, array + numElementos, tempArray);
+    resultados.emplace_back("Burbuja", ordenamiento.burbuja(tempArray));
+
+    ordenamiento.initDesordenado(array);
+    std::copy(array, array + numElementos, tempArray);
+    resultados.emplace_back("Seleccion", ordenamiento.seleccion(tempArray));
+
+    ordenamiento.initDesordenado(array);
+    std::copy(array, array + numElementos, tempArray);
+    resultados.emplace_back("Shell Sort", ordenamiento.shellSort(tempArray));
+
+    ordenamiento.initDesordenado(array);
+    std::copy(array, array + numElementos, tempArray);
+    resultados.emplace_back("Burbuja Modificado",
+                            ordenamiento.burbujaModificado(tempArray));
+
+    ordenamiento.initDesordenado(array);
+    std::copy(array, array + numElementos, tempArray);
+    resultados.emplace_back(
+        "Quick Sort", ordenamiento.quickSort(tempArray, 0, numElementos - 1));
+
+    std::cout
+        << "\n--- Comparación de Ordenamientos (Primeros 1000 Elementos) ---"
+        << std::endl;
+  } else {
+    ordenamiento.initDesordenado(array);
+    resultados.emplace_back("Insercion", ordenamiento.insercion(array));
+
+    ordenamiento.initDesordenado(array);
+    resultados.emplace_back("Burbuja", ordenamiento.burbuja(array));
+
+    ordenamiento.initDesordenado(array);
+    resultados.emplace_back("Seleccion", ordenamiento.seleccion(array));
+
+    ordenamiento.initDesordenado(array);
+    resultados.emplace_back("Shell Sort", ordenamiento.shellSort(array));
+
+    ordenamiento.initDesordenado(array);
+    resultados.emplace_back("Burbuja Modificado",
+                            ordenamiento.burbujaModificado(array));
+
+    ordenamiento.initDesordenado(array);
+    resultados.emplace_back("Quick Sort",
+                            ordenamiento.quickSort(array, 0, MAX - 1));
+
+    std::cout << "\n--- Comparación de Ordenamientos (Arreglo Completo) ---"
+              << std::endl;
+  }
+
+  std::sort(resultados.begin(), resultados.end(),
+            [](auto &left, auto &right) { return left.second < right.second; });
+
+  for (const auto &resultado : resultados) {
+    std::cout << resultado.first << ": " << resultado.second.count() << " ms"
+              << std::endl;
+  }
+}
+
