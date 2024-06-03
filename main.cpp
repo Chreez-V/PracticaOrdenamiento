@@ -54,41 +54,6 @@ void mostrarMenu() {
   std::cout << "Seleccione una opción: ";
 }
 
-void mostrarResultadosPorTiempo(Ordenamiento &ordenamiento, int array[]) {
-  std::vector<std::pair<std::string, std::chrono::duration<float, std::milli>>>
-      resultados;
-
-  ordenamiento.initDesordenado(array);
-  resultados.emplace_back("Insercion", ordenamiento.insercion(array));
-
-  ordenamiento.initDesordenado(array);
-  resultados.emplace_back("Burbuja", ordenamiento.burbuja(array));
-
-  ordenamiento.initDesordenado(array);
-  resultados.emplace_back("Seleccion", ordenamiento.seleccion(array));
-
-  ordenamiento.initDesordenado(array);
-  resultados.emplace_back("Shell Sort", ordenamiento.shellSort(array));
-
-  ordenamiento.initDesordenado(array);
-  resultados.emplace_back("Burbuja Modificado",
-                          ordenamiento.burbujaModificado(array));
-
-  ordenamiento.initDesordenado(array);
-  resultados.emplace_back("Quick Sort",
-                          ordenamiento.quickSort(array, 0, MAX - 1));
-
-  std::sort(resultados.begin(), resultados.end(),
-            [](auto &left, auto &right) { return left.second < right.second; });
-
-  std::cout << "\n--- Resultados por Tiempo (Arreglo Desordenado) ---"
-            << std::endl;
-  for (const auto &resultado : resultados) {
-    std::cout << resultado.first << ": " << resultado.second.count() << " ms"
-              << std::endl;
-  }
-}
-
 void compararOrdenamientos(Ordenamiento &ordenamiento, int array[],
                            bool primerosMil) {
   std::vector<std::pair<std::string, std::chrono::duration<float, std::milli>>>
